@@ -1,0 +1,390 @@
+---
+openapi: 3.0.0
+info:
+  title: soccer API
+  description: This is a simple API
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/elitm/soccer_API/1.0.0
+  description: SwaggerHub API Auto Mocking
+tags:
+- name: authorize
+  description: authorizion of login and register
+- name: user
+  description: user settings
+- name: home
+  description: home page ditails
+- name: coach
+  description: coach info
+- name: player
+  description: player info
+- name: team
+  description: Team info
+paths:
+  /register:
+    post:
+      tags:
+      - authorize
+      summary: New user added
+      description: A JSON
+      requestBody:
+        description: Inventory item to add
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/reg'
+        required: true
+      responses:
+        "201":
+          description: new user was added
+        "400":
+          description: error in parameters
+  /login:
+    post:
+      tags:
+      - authorize
+      summary: Existing user login
+      description: Existing user login
+      requestBody:
+        description: Inventory item to add
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/log'
+        required: true
+      responses:
+        "200":
+          description: login successful
+        "400":
+          description: username or password is incorrect
+  /Logout:
+    post:
+      tags:
+      - authorize
+      summary: connected user logout
+      responses:
+        "200":
+          description: logout succeeded
+  /homePage:
+    get:
+      tags:
+      - home
+      summary: First page when web was loded
+      description: home page -for connected user- current league and 3 games
+      responses:
+        "200":
+          description: all good, the request have been done
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OnlineUser'
+        "204":
+          description: not find connection
+        "400":
+          description: request failed
+  /coach/searchCoach:
+    get:
+      tags:
+      - coach
+      summary: Returns coach associated with the search keys (full or part name)
+      parameters:
+      - name: CoachName
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: Ronald Koeman
+      - name: amountOfCoachs
+        in: query
+        description: The numbers of Coachs will return
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          example: 10
+      responses:
+        "200":
+          description: Coachs retrieved succesfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+        "204":
+          description: couid not find the key search
+        "400":
+          description: bad request
+  /player/searchPlayer:
+    get:
+      tags:
+      - player
+      summary: Returns player associated with the search keys (full or part name)
+      parameters:
+      - name: PlayerName
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: Lionel Messi
+      - name: amountOfPlayers
+        in: query
+        description: The numbers of Players will return
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          example: 10
+      responses:
+        "200":
+          description: Players retrieved succesfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        "204":
+          description: couid not find the key search
+        "400":
+          description: bad request
+  /team/searchTeam:
+    get:
+      tags:
+      - team
+      summary: Returns team associated with the search keys (full or part name)
+      parameters:
+      - name: TeamName
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: Barcelona
+      responses:
+        "200":
+          description: Coachs retrieved succesfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+        "204":
+          description: couid not find the key search
+        "400":
+          description: bad request
+  /team/present:
+    get:
+      tags:
+      - team
+      summary: Returns team full info. serach by team name
+      parameters:
+      - name: TeamName
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+        example: Barcelona
+      responses:
+        "200":
+          description: Coachs retrieved succesfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_3'
+        "204":
+          description: couid not find the key search
+        "400":
+          description: bad request
+components:
+  schemas:
+    reg:
+      type: object
+      properties:
+        username:
+          maxLength: 8
+          minLength: 3
+          pattern: ^[A-Za-z]+$
+          type: string
+          description: username contains beween 3 to 8 letters only
+          example: chanaBanana
+        firstname:
+          type: string
+          example: Chana
+        lastname:
+          type: string
+          example: Banana
+        country:
+          type: string
+          example: Israel
+        password:
+          maxLength: 10
+          minLength: 5
+          pattern: ^(?=.*\d)(?=.*[^\da-zA-Z]).{5,10}$
+          type: string
+          description: password must conatins 5-10 charecters and at least 1 number and 1 special character.
+          format: password
+          example: ch@n@1
+        email:
+          type: string
+          format: email
+          example: chanabanana@gmail.com
+        image:
+          type: string
+          format: URL
+          example: https://res.cloudinary.com/drdo5rv4s/image/upload/v1620562617/202ebeef-6657-44ec-8fff-28352e1f5999_qytejp.jpg
+      description: User information
+    log:
+      type: object
+      properties:
+        username:
+          maxLength: 8
+          minLength: 3
+          type: string
+          description: username contains beween 3 to 8 letters only
+          example: chanabanana
+        password:
+          maxLength: 10
+          minLength: 5
+          type: string
+          description: password must conatins 5-10 charecters and at least 1 number and 1 special character.
+          format: password
+          example: ch@n@1
+      description: login info
+    CoachPreview:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 4
+        Name:
+          type: string
+          example: Ronald Koeman
+        TeamName:
+          type: string
+          example: Barcelona
+        Image:
+          type: string
+          example: https://res.cloudinary.com/drdo5rv4s/image/upload/v1620637778/375px-Lionel_Messi_20180626_vzvlmx.jpg
+        IsUserFavorite:
+          type: boolean
+          example: true
+    PlayerPreview:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 4
+        Name:
+          type: string
+          example: Lionel Messi
+        TeamName:
+          type: string
+          example: Barcelona
+        Image:
+          type: string
+          example: https://res.cloudinary.com/drdo5rv4s/image/upload/v1620637778/375px-Lionel_Messi_20180626_vzvlmx.jpg
+        Position:
+          type: integer
+          example: 4
+        IsUserFavorite:
+          type: boolean
+          example: true
+    OnlineUser:
+      type: object
+      properties:
+        LeagueItem:
+          $ref: '#/components/schemas/League'
+        FavoriteGames:
+          maxItems: 3
+          minItems: 0
+          type: array
+          items:
+            $ref: '#/components/schemas/Game'
+      description: home page - connected user
+    Game:
+      type: object
+      properties:
+        team1:
+          type: object
+          example: Barcelona
+        team2:
+          type: object
+          example: Real Madrid
+        date:
+          type: string
+          format: date
+          example: 2021-01-30
+      description: game info
+    League:
+      type: object
+      properties:
+        LeagueName:
+          type: string
+          example: Super League
+        Season:
+          type: string
+        Stage:
+          type: string
+        NextGame:
+          $ref: '#/components/schemas/Game'
+      description: league info
+    Team:
+      type: object
+      properties:
+        TeamName:
+          type: string
+          example: Barcelona
+        TeamPlayers:
+          minItems: 1
+          type: array
+          items:
+            $ref: '#/components/schemas/PlayerPreview'
+        TeamCoach:
+          $ref: '#/components/schemas/CoachPreview'
+        TeamGames:
+          type: array
+          items:
+            $ref: '#/components/schemas/Game'
+      description: team full info
+    TeamPreview:
+      properties:
+        TeamName:
+          type: string
+          example: Barcelona
+        TeamLogo:
+          type: string
+          example: https://res.cloudinary.com/drdo5rv4s/image/upload/v1620637778/375px-Lionel_Messi_20180626_vzvlmx.jpg
+      description: team preview - present only on search
+    inline_response_200:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/CoachPreview'
+    inline_response_200_1:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlayerPreview'
+    inline_response_200_2:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TeamPreview'
+    inline_response_200_3:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Team'
