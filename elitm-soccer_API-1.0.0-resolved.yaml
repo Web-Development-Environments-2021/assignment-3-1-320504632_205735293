@@ -224,7 +224,7 @@ components:
         password:
           maxLength: 10
           minLength: 5
-          pattern: ^(?=.*\d)(?=.*[^\da-zA-Z]).{5,10}$
+          pattern: ^(?=.\d)(?=.[^\da-zA-Z]).{5,10}$
           type: string
           description: password must conatins 5-10 charecters and at least 1 number and 1 special character.
           format: password

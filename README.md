@@ -1,6 +1,6 @@
 # Assignment3
 
-https://app.swaggerhub.com/apis-docs/bgu97/soccerAPI/1.0.0-oas3
+https://app.swaggerhub.com/apis-docs/elitm/soccer_API/1.0.0
 
 320504632 205735293
 
